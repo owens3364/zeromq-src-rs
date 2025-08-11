@@ -1,3 +1,4 @@
+use core::panic;
 use std::{
     env,
     fs::{self, File},
@@ -238,7 +239,6 @@ impl Build {
     /// Returns an `Artifacts` which contains metadata for linking
     /// against the compiled lib from rust code.
     pub fn build(&mut self) {
-        panic!("just a test.");
         let vendor = Path::new(env!("CARGO_MANIFEST_DIR")).join("vendor");
 
         let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
@@ -254,6 +254,7 @@ impl Build {
             // We use c++ as the default.
             .cpp(true)
             .define("ZMQ_BUILD_TESTS", "OFF")
+            .include(&lib_dir)
             .include(vendor.join("include"))
             .include(vendor.join("src"));
 
@@ -383,7 +384,8 @@ impl Build {
             ],
         );
 
-        add_c_sources(&mut build, vendor.join("external/sha1"), &["sha1.c"]);
+        build.flag(&format!("-L{}", lib_dir.to_str().unwrap()));
+        build.flag("-lzmq_c");
 
         if self.enable_draft {
             build.define("ZMQ_BUILD_DRAFT_API", "1");
