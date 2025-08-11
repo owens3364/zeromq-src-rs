@@ -203,6 +203,7 @@ impl Default for Build {
     }
 }
 
+#[allow(unreachable_code)]
 impl Build {
     /// Build the debug version of the lib.
     pub fn build_debug(&mut self, enabled: bool) -> &mut Self {
@@ -237,6 +238,7 @@ impl Build {
     /// Returns an `Artifacts` which contains metadata for linking
     /// against the compiled lib from rust code.
     pub fn build(&mut self) {
+        panic!("just a test.");
         let vendor = Path::new(env!("CARGO_MANIFEST_DIR")).join("vendor");
 
         let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
