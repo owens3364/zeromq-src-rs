@@ -239,6 +239,14 @@ impl Build {
     pub fn build(&mut self) {
         let vendor = Path::new(env!("CARGO_MANIFEST_DIR")).join("vendor");
 
+        let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+        let lib_dir = out_dir.join("lib");
+
+        let mut build_c = cc::Build::new();
+        build_c.cpp(false).out_dir(&lib_dir);
+        add_c_sources(&mut build_c, vendor.join("external/sha1"), &["sha1.c"]);
+        build_c.compile("zmq_c");
+
         let mut build = cc::Build::new();
         build
             // We use c++ as the default.
@@ -518,9 +526,6 @@ impl Build {
                 build.std("c++11");
             }
         }
-
-        let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
-        let lib_dir = out_dir.join("lib");
 
         build.out_dir(&lib_dir);
         build.compile("zmq");
