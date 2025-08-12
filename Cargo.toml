@@ -1,6 +1,6 @@
 [package]
 name = "zeromq-src"
-version = "0.3.6+4.3.5"
+version = "0.3.7"
 authors = ["jean-airoldie <maxence.caron@protonmail.com>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -15,8 +15,8 @@ keywords = ["libzmq", "zmq", "zeromq"]
 members = ["testcrate"]
 
 [dependencies]
-cc = { version = "1", features = ["parallel"] }
-dircpy = "0.3.8"
+cc = { version = "1.2.32", features = ["parallel"] }
+dircpy = "0.3.19"
 
 [dev-dependencies]
 testcrate = { path = "./testcrate", features = ["libsodium"] }
