@@ -249,6 +249,9 @@ impl Build {
         add_c_sources(&mut build_c, vendor.join("external/sha1"), &["sha1.c"]);
         build_c.compile("zmq_c");
 
+        println!("cargo:rustc-link-search=native={}", lib_dir.display());
+        println!("cargo:rustc-link-lib=static=zmq_c");
+
         let mut build = cc::Build::new();
         build
             // We use c++ as the default.
@@ -383,9 +386,6 @@ impl Build {
                 "zmtp_engine",
             ],
         );
-
-        build.flag(&format!("-L{}", lib_dir.to_str().unwrap()));
-        build.flag("-lzmq_c");
 
         if self.enable_draft {
             build.define("ZMQ_BUILD_DRAFT_API", "1");
