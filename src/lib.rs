@@ -245,7 +245,10 @@ impl Build {
         let lib_dir = out_dir.join("lib");
 
         let mut build_c = cc::Build::new();
-        build_c.cpp(false).out_dir(&lib_dir);
+        build_c
+            .cpp(false)
+            .flag_if_supported("-std=c11")
+            .out_dir(&lib_dir);
         add_c_sources(&mut build_c, vendor.join("external/sha1"), &["sha1.c"]);
         build_c.compile("zmq_c");
 
