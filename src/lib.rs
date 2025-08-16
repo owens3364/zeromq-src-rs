@@ -244,17 +244,6 @@ impl Build {
         let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
         let lib_dir = out_dir.join("lib");
 
-        let mut build_c = cc::Build::new();
-        build_c
-            .cpp(false)
-            .flag_if_supported("-std=c11")
-            .out_dir(&lib_dir);
-        add_c_sources(&mut build_c, vendor.join("external/sha1"), &["sha1.c"]);
-        build_c.compile("zmq_c");
-
-        println!("cargo:rustc-link-search=native={}", lib_dir.display());
-        println!("cargo:rustc-link-lib=static=zmq_c");
-
         let mut build = cc::Build::new();
         build
             // We use c++ as the default.
@@ -388,6 +377,12 @@ impl Build {
                 "zmq",
                 "zmtp_engine",
             ],
+        );
+
+        add_cpp_sources(
+            &mut build,
+            vendor.join("external/sha1"),
+            &["sha1.cpp"],
         );
 
         if self.enable_draft {
